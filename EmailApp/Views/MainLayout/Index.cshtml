@@ -1,0 +1,242 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mailbox</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/AdminLTE-3.0.4/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE-3.0.4/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <!-- /.navbar -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="container">
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                </ul>
+
+
+
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Messages Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-comments"></i>
+                            <span class="badge badge-danger navbar-badge">@(ViewBag.unreadCount ?? 0)</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            @if (ViewBag.RecentMessages != null)
+                            {
+                                @foreach (var message in ViewBag.RecentMessages)
+                                {
+                                    <a href="/Message/MessageDetail/@message.MessageId" class="dropdown-item">
+                                        <!-- Message Start -->
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h3 class="dropdown-item-title">
+                                                    @(message.Sender?.FirstName ?? "Unknown") @(message.Sender?.LastName ?? "")
+                                                    <span class="float-right text-sm text-danger">
+                                                        @if (message.IsImportant)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    </span>
+                                                </h3>
+                                                <p class="text-sm">@message.Subject</p>
+                                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @message.SendDate.ToString("HH:mm")</p>
+                                            </div>
+                                        </div>
+                                        <!-- Message End -->
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                }
+                            }
+                            <a href="/Message/Index" class="dropdown-item dropdown-footer">See All Messages</a>
+                        </div>
+                    </li>
+                    <!-- Notifications Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i>@ViewBag.UserFirstName  @ViewBag.UserLastName</i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg-start">
+                            <a href="/Login/Logout" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+
+
+
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                            <i class="fas fa-th-large"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Gelen Kutusu</h1>
+                        </div>
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="/Message/SendMessage" class="btn btn-primary btn-block mb-3">Oluştur</a>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Klasörler</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="nav nav-pills flex-column">
+                                    <li class="nav-item active">
+                                        <a href="/Message/Index" class="nav-link">
+                                            <i class="fas fa-inbox"></i> Gelen
+                                            <span class="badge bg-primary float-right">@(ViewBag.unreadCount ?? 0)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Message/SentMessages" class="nav-link">
+                                            <i class="far fa-envelope"></i> Gönderilen
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Message/Drafts" class="nav-link">
+                                            <i class="far fa-file-alt"></i> Taslak
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="/Message/Trash" class="nav-link">
+                                            <i class="far fa-trash-alt"></i> Çöp Kutusu
+                                            <span class="badge bg-primary float-right">@(ViewBag.trashCount ?? 0)</span>
+
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Kişisel</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="nav nav-pills flex-column">
+                                    <li class="nav-item">
+                                        <a href="/Message/ImportantMessages" class="nav-link">
+                                            <i class="far fa-circle text-danger"></i>
+                                            Önemli !
+                                            <span class="badge bg-danger float-right">@(ViewBag.importantCount ?? 0)</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    @RenderBody()
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/AdminLTE-3.0.4/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/AdminLTE-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/AdminLTE-3.0.4/dist/js/adminlte.min.js"></script>
+    <!-- Page Script -->
+    <script>
+        $(function () {
+          // Checkbox functionality removed - no longer needed
+
+          //Handle starring for glyphicon and font awesome - DISABLED
+          // Yıldız işlemleri artık server-side yapılıyor
+          /*
+          $('.mailbox-star').click(function (e) {
+            e.preventDefault()
+            //detect type
+            var $this = $(this).find('a > i')
+            var glyph = $this.hasClass('glyphicon')
+            var fa    = $this.hasClass('fa')
+
+            //Switch states
+            if (glyph) {
+              $this.toggleClass('glyphicon-star')
+              $this.toggleClass('glyphicon-star-empty')
+            }
+
+            if (fa) {
+              $this.toggleClass('fa-star')
+              $this.toggleClass('fa-star-o')
+            }
+          })
+        })
+    </script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/AdminLTE-3.0.4/dist/js/demo.js"></script>
+</body>
+</html>
